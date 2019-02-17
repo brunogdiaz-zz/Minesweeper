@@ -1,8 +1,8 @@
 # Minesweeper
-A good old minesweeper game
+A good old minesweeper game.
 
 ## Description
-Currently just created a simple Board Class to create the board
+Currently just created a simple Board Class to create the board.
 
 Spaces are represented by 'S'. Bombs are represented by 'B'. Numbers represent amount of bombs surrounded by.
 
