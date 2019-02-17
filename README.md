@@ -1,14 +1,14 @@
 # Minesweeper
 A good old minesweeper game
 
+## Description
 Currently just created a simple Board Class to create the board
 
-Spaces are represented by 'S'
-Bombs are represented by 'B'
-Numbers represent amount of bombs surrounded by
+Spaces are represented by 'S'. Bombs are represented by 'B'. Numbers represent amount of bombs surrounded by.
 
-Example of Board created from size 10x10 with difficulty set to 'medium'
-```
+## Example
+Board created from size 10 x 10 with difficulty set to 'medium'
+```bash
 board = Board(10, 10, 'medium')
 board.prepare_board()
 print(board)
