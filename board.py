@@ -2,8 +2,8 @@ from random import choice, choices
 
 
 class Board:
-    BOMB, SPACE = 'B', 'S'
-    EASY, MEDIUM, HARD = range(2), range(4), range(6)
+    BOMB, SPACE, EMPTY = 'B', 'S', 'X'
+    EASY, MEDIUM, HARD = range(3), range(5), range(7)
     MINIMUM_SIZE = 10
     MAX_SIZE = 20
 
@@ -26,6 +26,9 @@ class Board:
     def new_board(self):
         return [[self.SPACE for _ in range(self.length)] for _ in range(self.width)]
 
+    def empty_board(self):
+        return [[self.EMPTY for _ in range(self.length)] for _ in range(self.width)]
+
     def set_bombs(self):
         for i in range(self.width):
             bomb_positions = None
@@ -42,7 +45,7 @@ class Board:
                 self.board[i][position] = self.BOMB
                 self.bomb_count += 1
 
-    def set_points(self):
+    def set_surrounding_bomb_points(self):
         directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
         for i in range(self.width):
             for j in range(self.length):
@@ -63,7 +66,18 @@ class Board:
         self.bomb_count = 0
         self.board = self.new_board()
         self.set_bombs()
-        self.set_points()
+        self.set_surrounding_bomb_points()
+
+    def get_locations(self):
+        locations = set()
+        bomb_locations = set()
+        for i in range(self.width):
+            for j in range(self.length):
+                if self.board[i][j] != self.BOMB:
+                    locations.add((i, j))
+                else:
+                    bomb_locations.add((i, j))
+        return locations, bomb_locations
 
     def get_bomb_count(self):
         return self.bomb_count
@@ -74,6 +88,12 @@ class Board:
 
     def change_difficulty(self, difficulty):
         self.difficulty = difficulty
+
+    def print_board(self, board):
+        strings = []
+        for row in board:
+            strings.append(' '.join(row))
+        print('\n'.join(strings))
 
     def __str__(self):
         strings = []
