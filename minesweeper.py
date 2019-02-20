@@ -6,12 +6,12 @@ from board import Board
 class Minesweeper:
     DIRECTIONS = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
 
-    def __init__(self, width, length, difficulty='easy'):
+    def __init__(self, difficulty='easy'):
         self.game_board = None
         self.player_board = None
         self.difficulty = difficulty
-        self.width = width
-        self.length = length
+        self.width = None
+        self.length = None
         self.locations = None
         self.bomb_locations = None
 
@@ -35,12 +35,15 @@ class Minesweeper:
                 print()
                 print('Current Player Board')
                 self.game_board.print_board(self.player_board)
+            # print('LOCATIONS LEFT', self.locations)
             if len(self.locations) == 0:
                 print('!!!YOU WON!!!')
                 playing = False
 
     def new_game(self):
-        self.game_board = Board(self.width, self.length, self.difficulty)
+        self.game_board = Board(self.difficulty)
+        self.width = self.game_board.width
+        self.length = self.game_board.length
         self.game_board.prepare_board()
         self.player_board = self.game_board.empty_board()
         self.locations, self.bomb_locations = self.game_board.get_locations()

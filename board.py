@@ -3,25 +3,15 @@ from random import choice, choices
 
 class Board:
     BOMB, SPACE, EMPTY = 'B', 'S', 'X'
-    EASY, MEDIUM, HARD = range(3), range(5), range(7)
-    MINIMUM_SIZE = 10
-    MAX_SIZE = 20
+    DIFFICULTY = {
+        'easy': (7, 7, range(2)),
+        'medium': (10, 10, range(4)),
+        'hard': (15, 15, range(7))
+    }
 
-    def __init__(self, length, width, difficulty='easy'):
-        if length < self.MINIMUM_SIZE:
-            raise Exception(f'Length should be bigger than {self.MINIMUM_SIZE} blocks.')
-        elif length > self.MAX_SIZE:
-            raise Exception(f'Length should be smaller than {self.MAX_SIZE} blocks.')
-        if width < self.MINIMUM_SIZE:
-            raise Exception(f'Width should be bigger than {self.MINIMUM_SIZE} blocks.')
-        elif width > self.MAX_SIZE:
-            raise Exception(f'Width should be smaller than {self.MAX_SIZE} blocks.')
-
-        self.length = length
-        self.width = width
+    def __init__(self, difficulty='easy'):
         self.board = None
-        self.difficulty = difficulty
-        self.bomb_count = 0
+        self.length, self.width, self.bomb_range = self.DIFFICULTY[difficulty]
 
     def new_board(self):
         return [[self.SPACE for _ in range(self.length)] for _ in range(self.width)]
@@ -33,13 +23,7 @@ class Board:
         for i in range(self.width):
             bomb_positions = None
             indexes = range(self.length)
-            amount = 0
-            if self.difficulty == 'easy':
-                amount = choice(self.EASY)
-            elif self.difficulty == 'medium':
-                amount = choice(self.MEDIUM)
-            else:
-                amount = choice(self.HARD)
+            amount = choice(self.bomb_range)
             bomb_positions = choices(indexes, k=amount)
             for position in bomb_positions:
                 self.board[i][position] = self.BOMB
@@ -86,8 +70,8 @@ class Board:
         self.board = self.new_board()
         self.prepare_board()
 
-    def change_difficulty(self, difficulty):
-        self.difficulty = difficulty
+    def change_difficulty(self, difficulty='easy'):
+        self.length, self.width, self.bomb_range = self.DIFFICULTY[difficulty]
 
     def print_board(self, board):
         strings = []
