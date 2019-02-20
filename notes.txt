@@ -1,0 +1,15 @@
+Minesweeper Project
+
+Feb 17, 2019 -  Spent  ~ 1 hr - 1.5 hr - 4:00 AM
+
+* Set up Board Class which just creates and prepares the board.
+* Set up the .gitignore and the flake8 settings for linting (with linting). 
+* Set up README.md with the current things available.
+
+Feb 17, 2019 -  Spent  ~ 1.5 hr - 4:30 PM
+* Set up Logic to play Minesweeper (Takes answer by coordinates through the stdin)
+* Fixed up Difficulties
+* Need to fix naming convention and what Board Class actually represents.
+
+
+
