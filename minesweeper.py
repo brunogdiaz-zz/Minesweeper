@@ -1,29 +1,37 @@
 from board import Board
 
-# I might be needing a State object
-
 
 class Minesweeper:
-    DIRECTIONS = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+    DIRECTIONS = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1),
+                  (1, -1), (1, 0), (1, 1)]
+    DIFFICULTY = {
+        'easy': (7, 7, range(2)),
+        'medium': (10, 10, range(4)),
+        'hard': (15, 15, range(7))
+    }
 
     def __init__(self, difficulty='easy'):
         self.game_board = None
         self.player_board = None
+        if difficulty not in self.DIFFICULTY:
+            raise Exception(f'Difficulty "{difficulty}" is not one '
+                            'of the available difficulties: '
+                            f'{", ".join(self.DIFFICULTY.keys())}')
         self.difficulty = difficulty
-        self.width = None
-        self.length = None
+        self.length, self.width, self.bomb_range = self.DIFFICULTY[difficulty]
         self.locations = None
         self.bomb_locations = None
 
     def play(self):
         self.new_game()
         playing = True
-        print('NEW GAME')
+        print(f'Difficulty: {self.difficulty}')
+        self.game_board.stats()
         print('Current Player Board')
         self.game_board.print_board(self.player_board)
         while playing:
             print()
-            print('Type in your position to click(Example: 3,4)')
+            print('Type in your position to click (Example: 3,4)')
             print('Position:', end=' ')
             position = input()
             x, y = [int(n) - 1 for n in position.split(',')]
@@ -35,13 +43,18 @@ class Minesweeper:
                 print()
                 print('Current Player Board')
                 self.game_board.print_board(self.player_board)
-            # print('LOCATIONS LEFT', self.locations)
             if len(self.locations) == 0:
                 print('!!!YOU WON!!!')
                 playing = False
+        print('Do you wanna play again? (Type Y/N): ', end=' ')
+        play_again = input()
+        if play_again == 'Y':
+            self.play()
+        else:
+            print('Play again later!')
 
     def new_game(self):
-        self.game_board = Board(self.difficulty)
+        self.game_board = Board(self.length, self.width, self.bomb_range)
         self.width = self.game_board.width
         self.length = self.game_board.length
         self.game_board.prepare_board()
@@ -49,7 +62,8 @@ class Minesweeper:
         self.locations, self.bomb_locations = self.game_board.get_locations()
 
     def handle_action(self, x, y, visited):
-        if x < 0 or y < 0 or x >= self.width or y >= self.width or (x, y) in visited:
+        if x < 0 or y < 0 or x >= self.width or y >= self.width or \
+          (x, y) in visited:
             return 0
         if self.game_board.board[x][y] == 'B':
             self.set_all_bombs_for_player()
@@ -78,9 +92,3 @@ class Minesweeper:
         print('ACTUAL GAME BOARD')
         print(self.game_board)
         print()
-        print('Do you wanna play again? (Type Y/N): ', end=' ')
-        play_again = input()
-        if play_again == 'Y':
-            self.play()
-        else:
-            print('Play again later!')
